@@ -1,7 +1,6 @@
-#################
-### Inicializacao ###
-#################
-.
+---------------------------
+## Inicializacao ##
+---------------------------
 
 1) Desligar led UV
 2) Mover para o endstop
@@ -15,17 +14,15 @@
 	5)	Parar no endstop
 	6)	Descer para posicao de parking (endstop - 2 mm)
 
-
-
-##################
-### Configuracao ###
-##################
+---------------------------
+## Configuracao ##
+---------------------------
 
 Se NAO configurada:
 1) configurar zero do Z 
 
 
-# ACOES
+### ACOES
 	•	Incremento e decremento de 0,1mm
 	•	Incremento e decremento de 1mm
 	•	Incremento e decremento de 10mm
@@ -37,9 +34,15 @@ Se NAO configurada:
 
 
 
-###############
-### Impressao ###
-###############
+---------------------------
+## Impressao ##
+---------------------------
+
+### MENU
+- Print
+ - Select File
+- Pause
+- Cancel
 
 - Mover para Z zero
 
