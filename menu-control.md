@@ -3,11 +3,9 @@
 - Move+ 0.10 mm
 - Move+ 1.00 mm
 - Move+ 10.0 mm
-
 - Move- 0.10 mm
 - Move- 1.00 mm
 - Move- 10.0 mm
-
 - Set Zero
 
 
