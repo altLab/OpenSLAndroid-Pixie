@@ -1,0 +1,28 @@
+body,
+h1,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  margin: 2em;
+}
+
+nav {
+  flex: 1;
+}
+
+nav,
+ul {
+  display: flex;
+  justify-content: center;
+}
+
+nav,
+li {
+  display: inline;
+  margin-left: 15px;
+}
