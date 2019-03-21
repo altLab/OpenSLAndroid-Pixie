@@ -23,3 +23,5 @@
 - Layer Number
 - Estimate left time
 - Run time
+- Pause
+- Cancel
