@@ -44,6 +44,8 @@ Se NAO configurada:
 - Pause
 - Cancel
 
+---
+
 - Mover para Z zero
 
 - Funcao Peeling (0,05mm)
