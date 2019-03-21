@@ -1,5 +1,4 @@
----------------------------
-## Inicializacao ##
+# Inicializacao ##
 ---------------------------
 
 1) Desligar led UV
@@ -14,8 +13,7 @@
 6) Descer para posicao de parking (endstop - 2 mm)
 
 
----------------------------
-## Configuracao ##
+# Configuracao ##
 ---------------------------
 
 ### Se NAO configurada:
@@ -32,7 +30,6 @@
 - Guardar numero de camadas de subida do peeling
 
 
----------------------------
 ## Impressao ##
 ---------------------------
 
