@@ -1,0 +1,138 @@
+<!DOCTYPE HTML SYSTEM>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type"
+	content="text/html; charset=windows-1252">
+<title>NXTBrowser</title>
+<link rel="stylesheet" type="text/css" href="styles.css" media="all">
+<link rel="stylesheet" type="text/css" href="gh-buttons.css">
+
+<script type="text/javascript" src="jquery/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="jquery/jquery-migrate-1.1.1.min.js"></script>
+<script type="text/javascript" src="jquery.timer.js"></script>
+<script type="text/javascript" src="jquery.queryloader2.js"></script>
+<script type="text/javascript" src="jquery-lang.js"></script>
+<script type="text/javascript" src="lang-pt.js" charset="utf-8"></script>
+<script type="text/javascript" src="functions.js"></script>
+
+</head>
+<body>
+	<table style="border: none; margin-left: auto; margin-right: auto;"
+		class="ui-widget">
+		<tr>
+			<td>
+				<div style="text-align: left;">
+					<a href="http://www.iscte-iul.pt/"><img src="iscteiul.png"
+						height="50" width="50" alt="ISCTE-IUL" style="border:none"></a> <a
+						href="http://opensource.org/"><img src="opensource.png"
+						height="50" width="50" alt="Open Source" style="border:none"></a> <a href="http://www.lego.com/"><img
+						src="lego.png" height="50" width="50" alt="Lego" style="border:none"></a> <a
+						href="http://lejos.sourceforge.net/"><img src="lejos.png"
+						height="50" width="50" alt="LeJOS" style="border:none"></a> <a
+						href="http://www.android.com/"><img src="android.png"
+						height="50" width="50" alt="Android" style="border:none"></a>
+				</div>
+			</td>
+			<td><img src="top0.png" width="240" height="50" alt=""
+				id="touchsensor"></td>
+			<td><div style="text-align: right;">
+					<span lang="en">NXTBrowser by </span><a href="http://jpralves.net"><img
+						src="link-icon.png" style="vertical-align: middle; border: none" alt="">Jo&atilde;o
+						Alves</a>
+				</div></td>
+		</tr>
+		<tr>
+			<td>
+				<div style="position: relative">
+					<img src="sl5.png" width="315" height="320" alt="" id="leftvol">
+					<div style="position: absolute; top: 10; left: 10;">
+						<span id="nxt_leftvolsensor">-</span>
+					</div>
+					<div style="position: absolute; bottom: 10; left: 10;">
+						<span id="nxt_lefttacho">0</span>
+					</div>
+				</div>
+			</td>
+			<td>
+				<div
+					style="position: relative; left: 0; top: 0; width: 240; height: 320">
+					<img id="img1" src="shot.jpg"
+						style="position: absolute; top: 0; right: 0;" width="240" height="320"
+						alt="">
+						<img id="img2" src="shot.jpg"
+						style="position: absolute; top: 0; right: 0;" width="240" height="320"
+						alt="">
+				</div>
+			</td>
+			<td>
+				<div style="position: relative">
+					<img src="sr5.png" width="315" height="320" alt="" id="rightvol">
+					<div style="position: absolute; top: 10; right: 10;">
+						<span id="nxt_rightvolsensor">-</span>
+					</div>
+					<div style="position: absolute; bottom: 10; right: 10;">
+						<span id="nxt_righttacho">0</span>
+					</div>
+				</div>
+
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<fieldset>
+					<legend class="left">
+						<img src="nxt.png" height="16" alt=""> NXTSlave
+					</legend>
+					<ul>
+						<li><span lang="en">Battery: </span><img src="bat5.png" width="32" id="nxt_battery_icon"
+							alt=""> <span id="nxt_battery">-</span></li>
+						<li><span lang="en">Color Sensor: </span><span id="nxt_colorsensor">-</span></li>
+						<li><span lang="en">Speed: </span><span id="nxt_speed">-</span></li>
+						<li><span lang="en">DEBUG Counter: </span><span id="debug_counter">-</span></li>
+					</ul>
+				</fieldset>
+			</td>
+			<td>
+				<div style="text-align: center;">
+					<div id="nxt_control_color" style="background-color: red">
+						<p>
+							<span id="nxt_control">-</span>
+						</p>
+					</div>
+					<p>
+					<button id="goforward" class="button icon arrowup" lang="en">F</button>
+					</p>
+					
+					<button id="goleft" class="button icon arrowleft" lang="en">L</button>&nbsp;&nbsp;
+					<button id="goright" class="button icon arrowright" lang="en">R</button>
+					<p>
+						<button id="stop" class="button icon remove" lang="en">Stop</button>
+					</p>
+				</div>
+			</td>
+			<td>
+				<fieldset>
+					<legend class="right">
+						<img src="android.png" height="16" alt=""> NXTController
+					</legend>
+					<ul>
+						<li><span lang="en">Model: </span><span id="android_model">-</span></li>
+						<li><span lang="en">Clock: </span><span id="android_datetime">-</span></li>
+						<li><span lang="en">Battery: </span><img src="bat5.png" width="32"
+							id="android_battery_icon" alt=""> <span
+							id="android_battery">-</span></li>
+						<li><span id="nettype_label" lang="en">Wifi: </span><span
+							id="android_level">-</span></li>
+					</ul>
+				</fieldset>
+			</td>
+		</tr>
+	</table>
+	<div style="color: #ffffff">
+		<span id="error_counter">-</span> <span id="dump">-</span>
+	</div>
+	<script type="text/javascript">
+		initialize();
+	</script>
+</body>
+</html>
