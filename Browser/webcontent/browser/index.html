@@ -35,8 +35,13 @@
     <div class="container main">
       <div class="row">
         <div class="col-md-6">
-          <div class="card">
-            <img src="../printer.jpg" class="img-fluid" alt="Pretty Printer" />
+          <div class="card" id="img-card">
+            <img
+              id="printImage"
+              src="../printer.jpg"
+              class="img-fluid"
+              alt="Pretty Printer"
+            />
           </div>
         </div>
         <div class="col-md-6">
@@ -91,6 +96,15 @@
                   >
                 </div>
               </div>
+
+              <div class="form-group form-row">
+                <label class="col-5 col-form-label">Slices: </label>
+                <div class="col-7 form-control-plaintext">
+                  <span id="slices_current">-</span>
+                  /
+                  <span id="slices_total">-</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -119,7 +133,9 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Link</a>
+            <a class="nav-link" id="debug-tab" data-toggle="tab" href="#debug"
+              >Debug</a
+            >
           </li>
         </ul>
 
@@ -258,6 +274,35 @@
                       </button>
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="tab-pane fade"
+            id="debug"
+            role="tabpanel"
+            aria-labelledby="debug-tab"
+          >
+            <div class="container">
+              <div class="row text-center">
+                <div class="col-12">
+                  <button
+                    id="previous"
+                    type="button"
+                    class="btn btn-outline-dark"
+                  >
+                    Previous
+                  </button>
+                  <button id="next" type="button" class="btn btn-outline-dark">
+                    Next
+                  </button>
+                  <button id="show" type="button" class="btn btn-outline-dark">
+                    Show
+                  </button>
+                  <button id="hide" type="button" class="btn btn-outline-dark">
+                    Hide
+                  </button>
                 </div>
               </div>
             </div>

@@ -199,6 +199,17 @@ function updateInformationJson() {
     // }
 
     // $("#dump").text(jqXHR.responseText);
+
+    if (!isEmpty(jd.android.sliceimage)) {
+      $("#printImage").attr("src", jd.android.sliceimage);
+    }
+
+    if (!isEmpty(jd.android.slicestotal)) {
+      $("#slices_total").text(jd.android.slicestotal);
+    }
+    if (!isEmpty(jd.android.slicescurrent)) {
+      $("#slices_current").text(jd.android.slicescurrent);
+    }
   })
     .success(function() {})
     .error(function() {
@@ -417,19 +428,55 @@ function initButtons() {
     );
   });
 
-  $("#frmFile").on("submit", function(e) {
-    e.preventDefault();
-    console.log(e);
+  $("#show").on("click", function() {
+    $.get(
+      "command.cgi",
+      {
+        action: "showimage",
+        n: 1
+      },
+      function(data) {
+        // alert("Data Loaded: " + data);
+      }
+    );
+  });
+  $("#hide").on("click", function() {
+    $.get(
+      "command.cgi",
+      {
+        action: "showimage",
+        n: 0
+      },
+      function(data) {
+        // alert("Data Loaded: " + data);
+      }
+    );
+  });
 
-    // $.get(
-    //   "command.cgi",
-    //   {
-    //     action: "coisas"
-    //   },
-    //   function(data) {
-    //     // alert("Data Loaded: " + data);
-    //   }
-    // );
+  $("#previous").on("click", function() {
+    $.get(
+      "command.cgi",
+      {
+        action: "showimage",
+        n: "previous"
+      },
+      function(data) {
+        // alert("Data Loaded: " + data);
+      }
+    );
+  });
+
+  $("#next").on("click", function() {
+    $.get(
+      "command.cgi",
+      {
+        action: "showimage",
+        n: "next"
+      },
+      function(data) {
+        // alert("Data Loaded: " + data);
+      }
+    );
   });
 }
 
