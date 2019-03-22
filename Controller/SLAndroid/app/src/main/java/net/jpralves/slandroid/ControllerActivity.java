@@ -1,9 +1,13 @@
 package net.jpralves.slandroid;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
@@ -14,11 +18,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -39,12 +44,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -69,12 +74,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.SurfaceHolder;
 import android.view.View;
-import android.view.View.OnTouchListener;
-import android.view.ViewConfiguration;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -126,7 +126,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
     private Thread requestsThread = null;
 
     private final String resourceDirectory = Environment.getExternalStorageDirectory().getPath()
-            + File.separator + "nxtcontroller";
+            + File.separator + "controller";
 
     private ControllerApp app = null;
 
@@ -234,6 +234,10 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         app.setTableString("android.systemlocale", Locale.getDefault().getLanguage());
         setLanguage(getApplicationContext(), prefs.getString("locale", ""));
+        processZipfile("");
+
+        //TODO: Autoconnect server
+    //    HandleClick(R.id.buttonConnect);
 
         //getWindow().getDecorView().setSystemUiVisibility(0x10);
 
@@ -590,7 +594,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
         @Override
         protected Void doInBackground(Void... params) {
-            msg = getString(R.string.msg_setup_nxt);
+            msg = getString(R.string.msg_setup_bt);
             publishProgress(0);
             startNXT();
             msg = getString(R.string.msg_setup_webserver);
@@ -651,7 +655,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
         @Override
         protected Void doInBackground(Void... params) {
             if (isNXT) {
-                msg = getString(R.string.msg_disable_nxt);
+                msg = getString(R.string.msg_disable_bt);
                 publishProgress(0);
                 stopNXT();
             }
@@ -723,8 +727,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                 }
                 break;
             case R.id.buttonPref:
-                showImage();
-                //showSettings();
+                showSettings();
                 break;
 /*            case R.id.buttonLeft:
                 processAction("left");
@@ -738,7 +741,80 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
         }
     }
 
-    public void showImage() {
+//    public void showImage(String filenumber) {
+//        /* create a full screen window */
+//        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        setContentView(R.layout.activity_main);
+//
+//        /* adapt the image to the size of the display */
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//
+//        File rootDataDir = getApplicationContext().getFilesDir();
+//        String datafile = rootDataDir + File.separator + "datafile.zip";
+//        Bitmap bmp = null;
+//        if ( new File(datafile).exists()) {
+//            try {
+//                FileInputStream fin = new FileInputStream(datafile);
+//                BufferedInputStream bin = new BufferedInputStream(fin);
+//                ZipInputStream zin = new ZipInputStream(bin);
+//                ZipEntry zipEntry;
+//                ZipEntry ze = null;
+//
+//                while ((ze = zin.getNextEntry()) != null) {
+//                    Log.v(TAG, "Analysisng Zip File: " + datafile + " Entry: " + ze.getName());
+//                    if (ze.getName().equals(filenumber + ".png")) {
+//                        //InputStream stream = fin.getInputStream(ze);
+//                        int pos = 0;
+//                        byte[] b = null;
+//                        // Log.d(TAG,
+//                        // "Unzipping " + ze.getName() + " Size: " + ((int)
+//                        // ze.getSize()));
+//                        b = new byte[(int) ze.getSize()];
+//
+//                        byte[] buffer = new byte[2048];
+//                        int sizeb;
+//                        while ((sizeb = zin.read(buffer, 0, buffer.length)) != -1) {
+//                            System.arraycopy(buffer, 0, b, pos, sizeb);
+//                            pos += sizeb;
+//                        }
+//                        zin.closeEntry();
+//                        break;
+//                    }
+//
+////                        int filesize = (int)ze.getSize();
+////                        byte data[] = new byte[filesize+1];
+////                        zin.read(data, 0, filesize);
+////                        bmp = BitmapFactory.decodeByteArray(data, 0, data.length);
+////                        break;
+////                    }
+//                }
+//                zin.close();
+//            } catch (IOException e) {
+//                if (BuildConfig.DEBUG)
+//                    Log.e(TAG, e.getMessage(), e);
+//            }
+//
+//        }
+//
+////        Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+////                getResources(),R.drawable.background),size.x,size.y,true);
+//
+//        /* fill the background ImageView with the resized image */
+//        if (bmp != null) {
+//            ImageView iv_background = findViewById(R.id.iv_background);
+//            iv_background.setImageBitmap(bmp);
+//            iv_background.setVisibility(ImageView.VISIBLE);
+//
+//            LinearLayout iv_filledback = findViewById(R.id.iv_filledback);
+//            iv_filledback.setVisibility(LinearLayout.INVISIBLE);
+//        }
+//    }
+
+    public void showImage(String filenumber) {
         /* create a full screen window */
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -749,18 +825,32 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
-                getResources(),R.drawable.background),size.x,size.y,true);
+
+        //File rootDataDir = getApplicationContext().getFilesDir();
+        String rootDataDir = "/sdcard";
+        String datafile = rootDataDir + File.separator + filenumber + ".png";
+        Bitmap bmp = null;
+        if ( new File(datafile).exists()) {
+
+
+                bmp = BitmapFactory.decodeFile(datafile);
+
+
+        }
+
+//        Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
+//                getResources(),R.drawable.background),size.x,size.y,true);
 
         /* fill the background ImageView with the resized image */
-        ImageView iv_background = (ImageView) findViewById(R.id.iv_background);
-        iv_background.setImageBitmap(bmp);
-        iv_background.setVisibility(ImageView.VISIBLE);
+        if (bmp != null) {
+            ImageView iv_background = findViewById(R.id.iv_background);
+            iv_background.setImageBitmap(bmp);
+            iv_background.setVisibility(ImageView.VISIBLE);
 
-        LinearLayout iv_filledback= (LinearLayout) findViewById(R.id.iv_filledback);
-        iv_filledback.setVisibility(LinearLayout.INVISIBLE);
+            LinearLayout iv_filledback = findViewById(R.id.iv_filledback);
+            iv_filledback.setVisibility(LinearLayout.INVISIBLE);
+        }
     }
-
 
     /**
      * Starts the sensorService
@@ -795,9 +885,18 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
      * @param command can be "forward", "left", "right", "stop"
      * @return the command executed or error
      */
-    private String processAction(String command) {
+    private String processAction(String command, Properties parms) {
         String res = command;
-        if (control != null) {
+      if ( true || control != null) {
+            if (command.compareToIgnoreCase("backscreen") == 0) {
+                runOnUiThread(new Runnable(){
+                    public void run() {
+                        showImage(parms.getProperty("n"));
+                    }
+                });
+
+                res = "OK";
+            }
 /*           if (command.compareToIgnoreCase("forward") == 0) {
                 nxtControl.moveForward();
             } else if (command.compareToIgnoreCase("left") == 0) {
@@ -863,7 +962,8 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
                     String currentDateandTime = sdf.format(new Date());
 
-                    jsonAndroid.put("video", prefs.getBoolean("isVideoEnabled", true) ? 1 : 0);
+//                    jsonAndroid.put("video", prefs.getBoolean("isVideoEnabled", false) ? 1 : 0);
+                    jsonAndroid.put("video", 0);
 
                     // jsonAndroid.put("serverip",
                     // serverAddress.getHostAddress());
@@ -882,6 +982,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                     jsonAndroid.put("sensor.laccel.y", app.getTableValue("android.sensor.laccel.y"));
                     jsonAndroid.put("sensor.laccel.z", app.getTableValue("android.sensor.laccel.z"));
                     jsonAndroid.put("model", Utils.getDeviceModel());
+                    jsonAndroid.put("slicesnumbe", app.getTableValue("controller.slices.number"));
 
                     jsonBrowser.put("timeout", prefs.getInt("browserRefreshRate", 500));
 
@@ -906,7 +1007,11 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                 String newList = "";
                 JSONObject json = new JSONObject();
                 try {
-                    json.put("action", processAction((String) parms.get("action")));
+                    if (parms.get("action") !=null) {
+                        json.put("action", processAction((String) parms.get("action"), parms));
+                    } else {
+                        json.put("action", "No action passed");
+                    }
                 } catch (JSONException e) {
                     if (BuildConfig.DEBUG)
                         Log.e(TAG, e.getMessage(), e);
@@ -918,6 +1023,104 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
             }
 
         });
+
+
+        strServer.addHook(baseaddress + "files.cgi", new HttpHook() {
+            public Response execute(String uri, String method, Properties header, Properties parms,
+                                    Properties files) {
+                String mimetype = Response.MIME_JSON;
+                String newList = "";
+                JSONObject json = new JSONObject();
+                try {
+                    if (method.equals("POST")) {
+                        if (!files.getProperty("datafile").isEmpty()) {
+                            processZipfile(files.getProperty("datafile"));
+                        }
+                        json.put("action", "OK");
+                    } else {
+                        json.put("action", "Bad Request");
+                    }
+                } catch (JSONException e) {
+                    if (BuildConfig.DEBUG)
+                        Log.e(TAG, e.getMessage(), e);
+                } finally {
+                    newList = json.toString();
+                }
+                return new Response(Response.HTTP_OK, mimetype, new ByteArrayInputStream(newList
+                        .getBytes()));
+            }
+        });
+    }
+
+    private void processZipfile(String datafile) {
+        int TotalSize = 0;
+        int totalfiles = 0;
+        // File rootDataDir = new File("/sdcard"); //getApplicationContext().getFilesDir();
+        String rootDataDir = "/sdcard"; //getApplicationContext().getFilesDir();
+        if (datafile.isEmpty()) {
+            datafile = rootDataDir + File.separator + "datafile.zip";
+        }
+        Pattern p = Pattern.compile("[\\d]+.png");
+
+        if ( new File(datafile).exists()) {
+            try {
+                FileInputStream fin = new FileInputStream(datafile);
+                ZipInputStream zin = new ZipInputStream(new BufferedInputStream(fin));
+                ZipEntry zipEntry;
+                ZipEntry ze = null;
+
+                while ((ze = zin.getNextEntry()) != null) {
+                    Log.v(TAG, "Analysisng Zip File: " + datafile + " Entry: " + ze.getName());
+                    TotalSize += ze.getSize();
+                    Matcher matcher = p.matcher(ze.getName());
+                    if (!ze.isDirectory() && matcher.find()) {
+                        totalfiles++;
+                        // TODO: Create files temporarily
+                        FileOutputStream fout = new FileOutputStream(rootDataDir + File.separator + ze.getName());
+
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = zin.read(buffer)) != -1)
+                        {
+                            fout.write(buffer, 0, len);
+                        }
+                        fout.close();
+                        zin.closeEntry();
+                    }
+                }
+                zin.closeEntry();
+                Log.v(TAG, "Total Files:" + String.valueOf(totalfiles) + " Size:" + String.valueOf(TotalSize));
+                zin.close();
+            } catch (IOException e) {
+                if (BuildConfig.DEBUG)
+                    Log.e(TAG, e.getMessage(), e);
+            }
+            if (totalfiles > 0) {
+                try {
+                    String destfile = rootDataDir + File.separator + "datafile.zip";
+                    if (datafile != destfile) { // IF the filename is the same do nothing.
+                        File file = new File(destfile);
+                        if (file.exists())
+                            file.delete();
+
+                        Utils.CopyFile(datafile, destfile);
+                    }
+                    app.setTableInt("controller.slices.number", totalfiles);
+                } catch (IOException e) {
+                    if (BuildConfig.DEBUG)
+                        Log.e(TAG, e.getMessage(), e);
+                }
+            } else {
+                Log.v(TAG, "Invalid zip file - no files inside");
+            }
+        }
+        //TODO: Remove me
+//        runOnUiThread(new Runnable(){
+//            public void run() {
+//                showImage("1");
+//            }
+//        });
+
     }
 
     /**
@@ -944,6 +1147,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                                 Log.e(TAG, ze.getName() + " - Maximum extract size oversized! FIX!");
 
                         } else {
+
                             // Log.d(TAG,
                             // "Unzipping " + ze.getName() + " Size: " + ((int)
                             // ze.getSize()));
@@ -1031,11 +1235,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
             String secretPrefix = getSecretPrefix();
             configureDynamicHooks(secretPrefix);
-/*            if (Integer.parseInt(prefs.getString("nxtBrowserVersion", "2")) == 1) {
-                configureZipHooks(secretPrefix, R.raw.browserv1, "index.html");
-            } else {*/
-                configureZipHooks(secretPrefix, R.raw.browser, "index.html");
-            //}
+            configureZipHooks(secretPrefix, R.raw.browser, "index.html");
             configureDefaultHooks();
             isServer = true;
         } catch (IOException e) {

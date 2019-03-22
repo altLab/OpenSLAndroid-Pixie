@@ -92,9 +92,9 @@ public class SensorService extends Service {
 				// NXTControllerApp app = (NXTControllerApp) getApplication();
 				app.setTableString("android.phone.celllocation", location.toString());
 				super.onCellLocationChanged(location);
-			};
+			}
 
-			public void onSignalStrengthsChanged(final SignalStrength signal) {
+            public void onSignalStrengthsChanged(final SignalStrength signal) {
 
 				// NXTControllerApp app = (NXTControllerApp) getApplication();
 				int asu = signal.getGsmSignalStrength();
@@ -110,9 +110,9 @@ public class SensorService extends Service {
 						Utils.getMobileType(cm.getActiveNetworkInfo()));
 
 				super.onSignalStrengthsChanged(signal);
-			};
+			}
 
-			public void onServiceStateChanged(ServiceState serviceState) {
+            public void onServiceStateChanged(ServiceState serviceState) {
 				if (serviceState.getState() == ServiceState.STATE_POWER_OFF) {
 					ControllerApp app = (ControllerApp) getApplication();
 					app.clearTableEntry("android.phone.signal.asu");
@@ -270,6 +270,12 @@ public class SensorService extends Service {
 				break;
 			case Sensor.TYPE_PROXIMITY:
 				app.setTableFloat("android.sensor.proxymity", event.values[0]);
+				break;
+			case Sensor.TYPE_RELATIVE_HUMIDITY:
+				app.setTableFloat("android.sensor.humidity", event.values[0]);
+				break;
+			case Sensor.TYPE_PRESSURE:
+				app.setTableFloat("android.sensor.pressure", event.values[0]);
 				break;
 			default:
 				if (BuildConfig.DEBUG)
