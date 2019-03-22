@@ -5,6 +5,6 @@
 - Pitch: 117 (microns)
 - Theorethical minimum printable detail: 120 micron voxel (0.12mm)
 
-**Invesalius layer rebuilt print simuation**
+**Test print preview simulation, rebuilt from layers with Invesalius**
 
 ![TestPrintSimulationRebuild](OpenSLAndroidPixie-TestPrintSimulation.JPG)
