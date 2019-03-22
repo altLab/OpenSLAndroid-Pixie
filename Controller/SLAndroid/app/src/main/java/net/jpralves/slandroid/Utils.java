@@ -6,8 +6,11 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -196,5 +199,24 @@ public class Utils {
 			return android.os.Build.MODEL;
 		else
 			return android.os.Build.MANUFACTURER + " " + android.os.Build.MODEL;
+	}
+
+	public static void CopyFile(String src, String dst) throws IOException {
+		InputStream in = new FileInputStream(src);
+		try {
+			OutputStream out = new FileOutputStream(dst);
+			try {
+				// Transfer bytes from in to out
+				byte[] buf = new byte[1024];
+				int len;
+				while ((len = in.read(buf)) > 0) {
+					out.write(buf, 0, len);
+				}
+			} finally {
+				out.close();
+			}
+		} finally {
+			in.close();
+		}
 	}
 }

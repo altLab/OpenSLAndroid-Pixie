@@ -92,7 +92,7 @@ public class WebServer extends NanoHTTPD {
 			resp = new Response(HTTP_NOTFOUND, MIME_HTML, htmlResponseInvalidRequest);
 			return resp;
 			// TODO: Resolver este problema.
-			// return serveFile(uri, header, homeDir, true);
+			// return serve\(uri, header, homeDir, true);
 		}
 	}
 

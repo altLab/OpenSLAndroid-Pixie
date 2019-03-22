@@ -102,7 +102,7 @@
 					<p>
 					<button id="goforward" class="button icon arrowup" lang="en">F</button>
 					</p>
-					
+
 					<button id="goleft" class="button icon arrowleft" lang="en">L</button>&nbsp;&nbsp;
 					<button id="goright" class="button icon arrowright" lang="en">R</button>
 					<p>
@@ -134,5 +134,10 @@
 	<script type="text/javascript">
 		initialize();
 	</script>
+       <form action="files.cgi" enctype="multipart/form-data" method="post">
+    Text: <input type="text" name="textline" size="30"><br>
+    File: <input type="file" name="datafile" size="40"><br>
+    <input type="submit">
+    </form>
 </body>
 </html>
