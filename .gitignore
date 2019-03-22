@@ -12,4 +12,5 @@
 /captures
 .externalNativeBuild
 node_modules
+Browser/webcontent/browser/info.json
 
