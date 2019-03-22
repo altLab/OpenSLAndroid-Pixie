@@ -114,54 +114,6 @@ function isEmpty(obj) {
 
 function updateInformationJson() {
   $.getJSON("info.json", function(jd, status, jqXHR) {
-    if (!isEmpty(jd.nxt.battery)) {
-      $("#nxt_battery").text(jd.nxt.battery + " %");
-      setBatteryIcon("nxt_battery_icon", jd.nxt.battery);
-    }
-    modoRobot = jd.nxt.control;
-
-    $("#nxt_control").text(
-      modoRobot === 0 ? window.lang.convert("operator") : "SELF" //window.lang.convert("SELF")
-    );
-    if (modoRobot != 0) {
-      $("#nxt_control_color").css("background-color", "red");
-      $("#goleft").attr("disabled", true);
-      $("#goforward").attr("disabled", true);
-      $("#goright").attr("disabled", true);
-      $("#stop").attr("disabled", true);
-    } else {
-      $("#nxt_control_color").css("background-color", "white");
-      $("#goleft").removeAttr("disabled");
-      $("#goforward").removeAttr("disabled");
-      $("#goright").removeAttr("disabled");
-      $("#stop").removeAttr("disabled");
-    }
-    $("#nxt_speed").text(jd.nxt.speed);
-    $("#nxt_colorsensor").text(jd.nxt.colorsensor);
-
-    setTouchSensorImage(jd.nxt.touchsensor);
-
-    if (!isEmpty(jd.nxt.mindistance)) {
-      minimum = jd.nxt.mindistance;
-    }
-    if (!isEmpty(jd.nxt.lefttacho)) {
-      $("#nxt_lefttacho").text(jd.nxt.lefttacho);
-    }
-    if (!isEmpty(jd.nxt.righttacho)) {
-      $("#nxt_righttacho").text(jd.nxt.righttacho);
-    }
-
-    if (!isEmpty(jd.nxt.frontvolsensor) && jd.nxt.frontvolsensor != -1) {
-      $("#nxt_leftvolsensor").text(jd.nxt.frontvolsensor + " cm");
-      $("#nxt_rightvolsensor").text(jd.nxt.frontvolsensor + " cm");
-      updateVolSensors(jd.nxt.frontvolsensor, jd.nxt.frontvolsensor);
-    } else {
-      if (!isEmpty(jd.nxt.leftvolsensor) && jd.nxt.leftvolsensor != -1) {
-        $("#nxt_leftvolsensor").text(jd.nxt.leftvolsensor + " cm");
-        $("#nxt_rightvolsensor").text(jd.nxt.rightvolsensor + " cm");
-        updateVolSensors(jd.nxt.leftvolsensor, jd.nxt.rightvolsensor);
-      }
-    }
     $("#android_model").text(jd.android.model);
     $("#android_datetime").text(
       jd.android.datetime.replace(
@@ -458,7 +410,7 @@ function initButtons() {
       "command.cgi",
       {
         action: "showimage",
-        n: "previous"
+        n: "prev"
       },
       function(data) {
         // alert("Data Loaded: " + data);
