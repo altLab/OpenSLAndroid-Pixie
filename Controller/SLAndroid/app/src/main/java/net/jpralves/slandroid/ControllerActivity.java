@@ -96,7 +96,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
     private static final String TAG = ControllerActivity.class.getSimpleName();
 
-    private static final int MAXZIPFILE = 512000;
+    private static final int MAXZIPFILE = 1024000;
 
     private int port = 0;
     private InetAddress serverAddress;
@@ -504,7 +504,12 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
      */
     private void registerWebServer() {
         String baseServerURL;
-        String internalServerURL = "http://" + serverAddress.getHostAddress() + ":" + port;
+        String internalServerURL;
+        if (serverAddress != null) {
+            internalServerURL = "http://" + serverAddress.getHostAddress() + ":" + port;
+        } else {
+            internalServerURL = "not available";
+        }
         int natPort = Integer.parseInt(prefs.getString("webserverNATPort", "0"));
         if (natPort > 0) {
             baseServerURL = "http://@PUBIP@:" + natPort;
@@ -814,9 +819,12 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 //        }
 //    }
 
+
+
     public void showImage(String filenumber) {
         /* create a full screen window */
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //TODO: Se qusieres gastar algum tempo - esta funcao deverá ser optimizada.
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
@@ -824,31 +832,78 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
         /* adapt the image to the size of the display */
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
+        boolean mostra = false;
         display.getSize(size);
-
-        //File rootDataDir = getApplicationContext().getFilesDir();
-        String rootDataDir = "/sdcard";
-        String datafile = rootDataDir + File.separator + filenumber + ".png";
         Bitmap bmp = null;
-        if ( new File(datafile).exists()) {
+        if (filenumber.equals("0")) {
+            mostra = false;
+
+        } else {
+            if (filenumber.equals("next")) {
+                mostra = true;
+                int totalslices = app.getTableInt("controller.slices.total");
+                int currentslice = app.getTableInt("controller.slices.current");
+                if (currentslice < totalslices) {
+                    currentslice++;
+
+                }
+                filenumber = String.valueOf(currentslice);
+                app.setTableInt("controller.slices.current", currentslice);
+            } else if (filenumber.equals("prev")) {
+                mostra = true;
+                int totalslices = app.getTableInt("controller.slices.total");
+                int currentslice = app.getTableInt("controller.slices.current");
+                if (currentslice > 1) {
+                    currentslice--;
+                }
+                filenumber = String.valueOf(currentslice);
+                app.setTableInt("controller.slices.current", currentslice);
+            } else {
+                int currentslice = app.getTableInt("controller.slices.current");
+                filenumber = String.valueOf(currentslice);
+            }
+
+
+            if (Utils.isInteger(filenumber)) {
+
+                int currentslice = Integer.parseInt(filenumber);
+                app.setTableInt("controller.slices.current", currentslice);
+            } else {
+                Log.e(TAG, "The argument could not be transalated to a number [" + filenumber + "]");
+                return;
+            }
+            //File rootDataDir = getApplicationContext().getFilesDir();
+            String rootDataDir = "/sdcard";
+            String datafile = rootDataDir + File.separator + filenumber + ".png";
+
+            if (new File(datafile).exists()) {
+                mostra = true;
 
 
                 bmp = BitmapFactory.decodeFile(datafile);
 
 
-        }
+            }
 
 //        Bitmap bmp = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(
 //                getResources(),R.drawable.background),size.x,size.y,true);
-
+        }
         /* fill the background ImageView with the resized image */
         if (bmp != null) {
             ImageView iv_background = findViewById(R.id.iv_background);
             iv_background.setImageBitmap(bmp);
             iv_background.setVisibility(ImageView.VISIBLE);
-
+        }
+        if (mostra) {
+            ImageView iv_background = findViewById(R.id.iv_background);
+            iv_background.setVisibility(ImageView.VISIBLE);
             LinearLayout iv_filledback = findViewById(R.id.iv_filledback);
             iv_filledback.setVisibility(LinearLayout.INVISIBLE);
+        } else {
+            ImageView iv_background = findViewById(R.id.iv_background);
+            iv_background.setVisibility(ImageView.INVISIBLE);
+            LinearLayout iv_filledback = findViewById(R.id.iv_filledback);
+            iv_filledback.setVisibility(LinearLayout.VISIBLE);
         }
     }
 
@@ -888,7 +943,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
     private String processAction(String command, Properties parms) {
         String res = command;
       if ( true || control != null) {
-            if (command.compareToIgnoreCase("backscreen") == 0) {
+            if (command.compareToIgnoreCase("showimage") == 0) {
                 runOnUiThread(new Runnable(){
                     public void run() {
                         showImage(parms.getProperty("n"));
@@ -982,11 +1037,13 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                     jsonAndroid.put("sensor.laccel.y", app.getTableValue("android.sensor.laccel.y"));
                     jsonAndroid.put("sensor.laccel.z", app.getTableValue("android.sensor.laccel.z"));
                     jsonAndroid.put("model", Utils.getDeviceModel());
-                    jsonAndroid.put("slicesnumbe", app.getTableValue("controller.slices.number"));
+                    jsonAndroid.put("slicescurrent", app.getTableValue("controller.slices.current"));
+                    jsonAndroid.put("slicestotal", app.getTableValue("controller.slices.total"));
+                    jsonAndroid.put("sliceimage", "images.cgi?filenumber="+app.getTableValue("controller.slices.current"));
 
                     jsonBrowser.put("timeout", prefs.getInt("browserRefreshRate", 500));
 
-                    json.put("nxt", jsonNXT);
+                    json.put("controller", jsonNXT);
                     json.put("android", jsonAndroid);
                     json.put("browser", jsonBrowser);
                 } catch (JSONException e) {
@@ -1046,8 +1103,53 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                 } finally {
                     newList = json.toString();
                 }
-                return new Response(Response.HTTP_OK, mimetype, new ByteArrayInputStream(newList
-                        .getBytes()));
+                String backtobase;
+                if (header.getProperty("referer") != null) {
+                    backtobase = header.getProperty("referer");
+                } else {
+                    backtobase = serverURL;
+                }
+                Response r = new Response(Response.HTTP_REDIRECT, "", "");
+                r.addHeader("Location", backtobase);
+                return r;
+            }
+        });
+        strServer.addHook(baseaddress + "images.cgi", new HttpHook() {
+            public Response execute(String uri, String method, Properties header, Properties parms,
+                                    Properties files) {
+
+                String htmlResponseInvalidRequest = "<html><body><h1>Invalid request</h1></body></html>\n";
+                String rootDataDir = "/sdcard";
+                String filenumber = parms.getProperty("filenumber");
+                if (filenumber != null) {
+                    String datafile = rootDataDir + File.separator + filenumber + ".png";
+                    try {
+                        File f = new File(datafile);
+                        if (f.exists()) {
+
+                            String mimetype = getMimeType(filenumber + ".png");
+                            FileInputStream fin = new FileInputStream(f);
+
+                            int pos = 0;
+                            byte[] b = new byte[(int) f.length()];
+                            int size;
+                            byte[] buffer = new byte[2048];
+                            while ((size = fin.read(buffer, 0, buffer.length)) != -1) {
+                                System.arraycopy(buffer, 0, b, pos, size);
+                                pos += size;
+                            }
+                            fin.close();
+                            return new Response(Response.HTTP_OK, mimetype, new ByteArrayInputStream(b));
+                        } else {
+                            return new Response(Response.HTTP_NOTFOUND, WebServer.MIME_HTML, htmlResponseInvalidRequest);
+                        }
+                    } catch (IOException e) {
+                        if (BuildConfig.DEBUG)
+                            Log.e(TAG, e.getMessage(), e);
+                    }
+
+                }
+                return new Response(Response.HTTP_NOTFOUND, WebServer.MIME_HTML, htmlResponseInvalidRequest);
             }
         });
     }
@@ -1105,7 +1207,8 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
                         Utils.CopyFile(datafile, destfile);
                     }
-                    app.setTableInt("controller.slices.number", totalfiles);
+                    app.setTableInt("controller.slices.total", totalfiles);
+                    app.setTableInt("controller.slices.number", 1);
                 } catch (IOException e) {
                     if (BuildConfig.DEBUG)
                         Log.e(TAG, e.getMessage(), e);
