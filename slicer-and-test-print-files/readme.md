@@ -10,3 +10,6 @@
 **Test print preview simulation, rebuilt from layers with Invesalius**
 
 ![TestPrintSimulationRebuild](OpenSLAndroidPixie-TestPrintSimulation.JPG)
+
+The test print badge is designed for quick print at 50u with minimum material use.
+It features a small group of test bars to test minimum negative and positive details. it was designed to print at 40x25x2mm (WxHxD) for this particular LCD screen
