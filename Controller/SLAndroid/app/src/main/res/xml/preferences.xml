@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="first_preferencescreen"
+    android:title="@string/preferences_title" >
+
+    <PreferenceScreen
+        android:enabled="true"
+        android:icon="@drawable/ic_launcher"
+        android:key="nxt_prefs"
+        android:title="@string/prefs_nxtslave" >
+        <EditTextPreference
+            android:name="@string/prefs_nxtslave_editBrickName"
+            android:defaultValue="NXT"
+            android:icon="@drawable/ic_nxt_brick"
+            android:key="editBrickName"
+            android:title="@string/prefs_nxtslave_editBrickName_title" />
+
+
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="nxtBrake"
+            android:summary="@string/prefs_nxtslave_nxtBrake_summary"
+            android:title="@string/prefs_nxtslave_nxtBrake_title" />
+
+
+        <net.jpralves.slandroid.SeekBarPreference
+            android:defaultValue="300"
+            android:dialogMessage="@string/prefs_nxtslave_nxtSpeed_dialog"
+            android:key="nxtSpeed"
+            android:max="900"
+            android:text="@string/prefs_nxtslave_nxtSpeed_text"
+            android:title="@string/prefs_nxtslave_nxtSpeed_title" />
+        <net.jpralves.slandroid.SeekBarPreference
+            android:defaultValue="20"
+            android:dialogMessage="@string/prefs_nxtslave_nxtMinDistance_dialog"
+            android:key="nxtMinDistance"
+            android:max="200"
+            android:text="@string/prefs_nxtslave_nxtMinDistance_text"
+            android:title="@string/prefs_nxtslave_nxtMinDistance_title" />
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:enabled="true"
+        android:icon="@drawable/i_network"
+        android:key="webserver_prefs"
+        android:title="@string/prefs_webserver" >
+        <EditTextPreference
+            android:name="@string/prefs_webserver_webserverPort"
+            android:defaultValue="8080"
+            android:inputType="number"
+            android:key="webserverPort"
+            android:title="@string/prefs_webserver_webserverPort_title" />
+        <EditTextPreference
+            android:name="@string/prefs_webserver_webserverNATPort"
+            android:defaultValue="0"
+            android:inputType="number"
+            android:key="webserverNATPort"
+            android:title="@string/prefs_webserver_webserverNATPort_title" />
+        <EditTextPreference
+            android:name="@string/prefs_webserver_webserverPassword"
+            android:defaultValue="nxtcontroller"
+            android:key="webserverPassword"
+            android:title="@string/prefs_webserver_webserverPassword_title" />
+
+        <EditTextPreference
+            android:name="@string/prefs_webserver_pubSiteAddress"
+            android:defaultValue="@string/pubSite"
+            android:key="pubSiteAddress"
+            android:title="@string/prefs_webserver_pubSiteAddress_title" />
+        <EditTextPreference
+            android:name="@string/prefs_webserver_pubsiteKey"
+            android:defaultValue="171bc7518d5591dcc1b509b303a5fe3b"
+            android:key="pubsiteKey"
+            android:title="@string/prefs_webserver_pubsiteKey_title" />
+    </PreferenceScreen>
+    <PreferenceScreen
+        android:enabled="true"
+        android:icon="@drawable/i_system"
+        android:key="general_prefs"
+        android:title="@string/prefs_general" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="androidButtons"
+            android:summary="@string/prefs_general_androidButtons_summary"
+            android:title="@string/prefs_general_androidButtons_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="textToSpeech"
+            android:summary="@string/prefs_general_textToSpeech_summary"
+            android:title="@string/prefs_general_textToSpeech_title" />
+
+    </PreferenceScreen>
+</PreferenceScreen>
