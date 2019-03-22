@@ -9,7 +9,6 @@ var showing = null;
 var timeout = 500;
 var modoRobot = 0;
 var timerJson = null;
-var timerVideo = null;
 var langpref = "en";
 var minimun = 10;
 
@@ -175,7 +174,6 @@ function updateInformationJson() {
         window.lang.convert("Error communicating to webserver - disable timer")
       );
       timerJson.toggle();
-      timerVideo.toggle();
       // } else {
       // alert("Still calling!");
       // }
@@ -186,38 +184,7 @@ function updateInformationJson() {
 // Initialization routines:
 
 function initResources() {
-  preloadImages(
-    [
-      "sl0.png",
-      "sl1.png",
-      "sl2.png",
-      "sl3.png",
-      "sl4.png",
-      "sl5.png",
-      "sr0.png",
-      "sr1.png",
-      "sr2.png",
-      "sr3.png",
-      "sr4.png",
-      "sr5.png",
-      "top0.png",
-      "top1.png",
-      "bat1.png",
-      "bat2.png",
-      "bat3.png",
-      "bat4.png",
-      "bat5.png",
-      "iscteiul.png",
-      "lego.png",
-      "lejos.png",
-      "android.png",
-      "opensource.png",
-      "link-icon.png",
-      "nxt.png",
-      "shot.jpg"
-    ],
-    function() {}
-  );
+  preloadImages([], function() {});
 
   $(document).ready(function() {
     $("body").queryLoader2({
@@ -531,16 +498,6 @@ function initTimers() {
     time: timeout,
     autostart: true
   });
-  if (videoOn == 1) {
-    $(initVideo);
-    timerVideo = $.timer(function() {
-      $(processVideo);
-    });
-    timerVideo.set({
-      time: timeout,
-      autostart: true
-    });
-  }
 }
 
 function initialize() {
