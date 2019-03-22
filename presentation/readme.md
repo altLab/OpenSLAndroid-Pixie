@@ -8,7 +8,7 @@ Image AltLabLogo
 
 2. Mostly because they become obsolete and can no longer cope with the internet, or they just do not support the most recent software updates.
 
-image sad phone http://img02.deviantart.net/d9b2/i/2013/310/8/a/sad_iphone_by_acannov-d6t8q20.png
+![sad phone](https://i.imgur.com/cR2XWi0.jpg)
 
 3. Our project aims to create awareness in this audience of Masters, that these old phones are a great source for free parts to use in  our projects
 
