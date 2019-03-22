@@ -12,7 +12,7 @@ image sad phone http://img02.deviantart.net/d9b2/i/2013/310/8/a/sad_iphone_by_ac
 
 3. Our project aims to create awareness in this audience of Masters, that these old phones are a great source for free parts to use in  our projects
 
-image exploded parts diagram
+![exploded](https://amp.businessinsider.com/images/5a0313de3dbef4e3058b489d-750-675.jpg)
 
 with this in mind,the altlab crew proudly presents...
 
