@@ -1,0 +1,47 @@
+.ui-widget {
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 1.1em;
+}
+
+.ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button
+	{
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 1em;
+}
+
+a { text-decoration: none; }
+:link { color: #000000; }  /* for unvisited links */
+:visited { color: #000000; } /* for visited links */
+a:active { color: #000000; } /* when link is clicked */
+a:hover { color: #000000; font-weight: bold;} /* when mouse is over link */
+
+fieldset {
+	border: 1px solid black;
+}
+
+legend {
+	padding: 0.2em 0.5em;
+	border: 1px solid black;
+	color: black;
+	font-size: 90%;
+}
+
+legend.right  {
+	text-align: right;
+}
+
+legend.left  {
+	text-align: left;
+}
+
+#overlay {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    z-index:50;
+}
