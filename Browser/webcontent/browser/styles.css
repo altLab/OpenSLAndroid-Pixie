@@ -80,3 +80,9 @@ legend.left {
 section {
   margin-top: 3em;
 }
+
+@media screen and (max-width: 768px) {
+  #img-card {
+    margin-bottom: 1.5em;
+  }
+}
