@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>NXT Browser - Login</title>
+<meta charset="utf-8">
+<script type="text/javascript" src="sha1.js">
+	/* SHA-256 JavaScript implementation */
+</script>
+<script type="text/javascript" src="utf8.js">
+	/* UTF-8 encoding */
+</script>
+<script type="text/javascript">
+	var salt = "[SALT]";
+	var langpref = "[LANG]";
+	var invalidpassword = "Invalid password.";
+
+	function enterKeyPress(e) {
+		// look for window.event in case event isn't passed in
+		if (typeof e == 'undefined' && window.event) {
+			e = window.event;
+		}
+
+		if (e.keyCode == 13) {
+			document.getElementById('btnGo').click();
+			return false;
+		}
+	}
+
+	function setupLang() {
+		if (langpref == 'pt') {
+			document.getElementById('legendLogin').innerHTML = " Entrada ";
+			document.getElementById('lbltipPassword').innerHTML = "Introduza Senha";
+			document.getElementById('btnGo').innerHTML = "Entrar";
+			document.title = "NXTBrowser - Entrada";
+			invalidpassword = "Senha inválida";
+		}
+		return true;
+	}
+
+	function gotoForm() {
+	    document.onkeypress = enterKeyPress;
+		document.getElementById('Password').focus();
+	}
+/*
+ * Get cross browser xhr object
+ *
+ *
+ *            DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE
+ *                    Version 2, December 2004
+ *
+ * Copyright (C) 2011 Jed Schmidt <http://jed.is>
+ * More: https://gist.github.com/993585
+ * https://github.com/honza/140medley
+ *
+ */
+
+var j = function(
+  a // cursor placeholder
+){
+  for(                      // for all a
+    a=0;                    // from 0
+    a<4;                    // to 4,
+    a++                     // incrementing
+  ) try {                   // try
+    return a                // returning
+      ? new ActiveXObject(  // a new ActiveXObject
+          [                 // reflecting
+            ,               // (elided)
+            "Msxml2",       // the various
+            "Msxml3",       // working
+            "Microsoft"     // options
+          ][a] +            // for Microsoft implementations, and
+          ".XMLHTTP"        // the appropriate suffix,
+        )                   // but make sure to
+      : new XMLHttpRequest; // try the w3c standard first, and
+  }
+
+  catch(e){}               // ignore when it fails.
+}
+
+
+function validatepassword() {
+var result = false;
+var xhr = j();
+
+try {
+xhr.open("GET", Sha1.hash(salt+document.getElementById("Password").value)+ "/styles.css", false);
+        xhr.onreadystatechange = function () {
+		if (xhr.readyState==4 && xhr.status==200) {
+			result = true;
+			}
+        };
+        xhr.send();
+		}
+		catch(e){}
+return result;
+}
+
+function doPassword() {
+if (validatepassword()) {
+   parent.location=Sha1.hash(salt+document.getElementById("Password").value)+ "/";
+   return true;
+} else {
+  alert(invalidpassword);
+  gotoForm();
+  return false;
+}
+}
+
+function init() {
+  return setupLang() && gotoForm();
+}
+</script>
+<style>
+.ui-widget {
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 1.1em;
+}
+
+.ui-widget input,.ui-widget button
+	{
+	font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif;
+	font-size: 1em;
+}
+
+h1 {
+	font-size: 275%;
+	font-weight: bold;
+	text-align: center;
+}
+
+fieldset {
+	display:block;
+	border: 1px solid black;
+}
+
+legend {
+	padding: 0.2em 0.5em;
+	border: 1px solid black;
+	color: black;
+	font-size: 90%;
+}
+
+div {
+	padding: 0.8em 0.8em;
+}
+
+input {
+	padding: 0.2em 0.5em;
+	border: 1px solid black;
+	font-size: 90%;
+}
+
+button {
+	padding: 0.2em 0.5em;
+	border: 1px solid black;
+	font-size: 90%;
+	display: block;
+	margin: 0 auto;
+	margin-right: 10px;
+}
+
+table {
+	border: none;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table td {
+    padding: 20px;
+}
+</style>
+</head>
+
+<body class="ui-widget" onload="init();">
+	<H1>OPENSLA Browser</H1>
+	<table>
+		<tr>
+			<td><img src="opensla.png" alt=""></td>
+			<td>
+				<form name="f">
+					<fieldset>
+						<legend id="legendLogin"> Login </legend>
+						<div>
+						<label id="lbltipPassword" for="Password"> Enter Password
+						</label> <input name="Password" id="Password" type="password"
+							maxlength="16" size="16">
+						<p>
+							<button type="button" id="btnGo"
+								onClick='doPassword()'>
+								Login</button>
+						</p>
+						</div>
+					</fieldset>
+				</form>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>

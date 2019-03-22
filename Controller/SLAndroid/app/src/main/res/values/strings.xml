@@ -1,0 +1,112 @@
+<resources>
+    <string name="app_name">SLAndroid</string>
+    <string name="main_text">Prototype Edition</string>
+    <string name="configMenu">Config</string>
+    <string name="title_activity_about">About</string>
+    <string name="title_activity_diagnostics">Diagnostics</string>
+    <string name="title_activity_preferences">Set Preferences</string>
+    <string name="title_activity_fsbrowser">File System Browser</string>
+    <string name="title_activity_serialterminal">Serial Terminal</string>
+    <string name="diagnostics">Diagnostics</string>
+    <string name="diag_prompt">Diagnostics</string>
+    <string name="nodata">No data</string>
+    <string name="credits">Credits</string>
+    <string name="msg_loading">Loading</string>
+    <string name="msg_setup_nxt">Setup NXT</string>
+    <string name="msg_setup_webserver">Setup Webserver</string>
+    <string name="msg_finishing">Finishing</string>
+    <string name="msg_disable_nxt">Disable NXT</string>
+    <string name="msg_disable_webserver">Disable Webserver</string>
+    <string name="disconnected">Disconnected</string>
+    <string name="no_network">Network not detected.</string>
+    <string name="ok" translatable="false">OK</string>
+
+    <string name="nxtrobot">NXT Robot</string>
+    <string name="nxt">NXT</string>
+    <string name="webserver">WebServer</string>
+    <string name="exittitle">Exit</string>
+    <string name="exitprompt">do you really want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="disable_bluetooth">Disabling Bluetooth</string>
+    <string name="gotourl">"Goto "</string>
+    <string name="mainConnect">Connect</string>
+    <string name="mainDisconnect">Disconnect</string>
+    <string name="sendTo">Send file to</string>
+    <string name="writeDiags">Write Diags File</string>
+    <string name="generatingDiags">Generating Diag File</string>
+    <string name="usingAlternate">Using alternate path for Diag File</string>
+    <string name="writingHeader">Writing HEADER</string>
+    <string name="writing">"Writing "</string>
+    <string name="errorWriting">Error writing to file</string>
+    <string name="aboutDetails">
+The NXTcontroller is a module developed for Android as part of a prototype
+tele-operated robot.
+The work was develop by João Alves (mailto:jpralves@gmail.com) and was the result of
+a thesis called "Mobile Robotic System controlled remotely via the Internet".
+The source code of this work is published in GitHub (https://github.com/jpralves/tourrobot).
+Besides this module there are also two additional modules in this repository.
+Specific instructions on how to use the prototype are described in GitHub.</string>
+    <string name="pubSite">"http://jpralves.net/51/</string>
+    <string name="butForward">Forward</string>
+    <string name="butLeft">Left</string>
+    <string name="butRight">Right</string>
+    <string name="butStop">Stop</string>
+    <string name="Menu">Menu</string>
+    <string name="this_dir">.</string>
+    <string name="parent_dir">..</string>
+    <string name="preferences_title">Preferences</string>
+    <string name="prefs_nxtslave">NXTSlave</string>
+    <string name="prefs_nxtslave_editBrickName">NXT Brick Name</string>
+    <string name="prefs_nxtslave_editBrickName_title">NXT Brick Name</string>
+    <string name="prefs_nxtslave_motorLeft_title">Motor Left</string>
+    <string name="prefs_nxtslave_motorRight_title">Motor Right</string>
+    <string name="prefs_nxtslave_volumetricSensorLeft_title">Volumetric Left</string>
+    <string name="prefs_nxtslave_volumetricSensorRight_title">Volumetric Right</string>
+    <string name="prefs_nxtslave_volumetricSensorFront_title">Volumetric Front</string>
+    <string name="prefs_nxtslave_touchSensor_title">Touch Sensor</string>
+    <string name="prefs_nxtslave_colorSensor_title">Color Sensor</string>
+    <string name="prefs_nxtslave_nxtBrake_summary">set brake mode</string>
+    <string name="prefs_nxtslave_nxtBrake_title">Brake</string>
+    <string name="prefs_nxtslave_nxtMotorDirection_title">Motor Direction</string>
+    <string name="prefs_nxtslave_nxtSpeed_dialog">Speed</string>
+    <string name="prefs_nxtslave_nxtSpeed_text"> degrees/sec</string>
+    <string name="prefs_nxtslave_nxtSpeed_title">NXT speed</string>
+    <string name="prefs_nxtslave_nxtMinDistance_dialog">Minimum Reaction Distance</string>
+    <string name="prefs_nxtslave_nxtMinDistance_text"> cm</string>
+    <string name="prefs_nxtslave_nxtMinDistance_title">Min. Distance</string>
+    <string name="prefs_webserver">WebServer</string>
+    <string name="prefs_webserver_webserverPort">Webserver Port</string>
+    <string name="prefs_webserver_webserverPort_title">Webserver Port</string>
+    <string name="prefs_webserver_webserverNATPort">Webserver NAT Port</string>
+    <string name="prefs_webserver_webserverNATPort_title">Webserver NAT Port</string>
+    <string name="prefs_webserver_webserverPassword">Webserver Password</string>
+    <string name="prefs_webserver_webserverPassword_title">Webserver Password</string>
+    <string name="prefs_webserver_isVideoEnabled_summary">enable video broadcast</string>
+    <string name="prefs_webserver_isVideoEnabled_title">Video</string>
+    <string name="prefs_webserver_isVideoCaptureEnabled_summary">enable video capture (only with video enabled)</string>
+    <string name="prefs_webserver_isVideoCaptureEnabled_title">Video Capture</string>
+    <string name="prefs_webserver_jpegCompression_title">JPEG compression ratio</string>
+    <string name="prefs_webserver_jpegCompression_dialog">JPEG compression ratio</string>
+    <string name="prefs_webserver_nxtBrowserVersion_title">NXTBrowser Version</string>
+    <string name="prefs_webserver_browserRefreshRate_title">Browser Refresh Rate</string>
+    <string name="prefs_webserver_browserRefreshRate_dialog">Refresh Rate</string>
+    <string name="prefs_webserver_pubSiteAddress">Publish Site Address</string>
+    <string name="prefs_webserver_pubSiteAddress_title">Publish Site Address</string>
+    <string name="prefs_webserver_pubsiteKey">Publish Site Key</string>
+    <string name="prefs_webserver_pubsiteKey_title">Publish Site Key</string>
+    <string name="prefs_general">General</string>
+    <string name="prefs_general_isSplashEnabled_summary">enable initial SplashScreen</string>
+    <string name="prefs_general_isSplashEnabled_title">SplashScreen</string>
+    <string name="prefs_general_androidButtons_summary">enable control from Android Screen</string>
+    <string name="prefs_general_androidButtons_title">Screen Control Buttons</string>
+    <string name="prefs_general_textToSpeech_summary">enable Text-to-Speech</string>
+    <string name="prefs_general_textToSpeech_title">Text to Speech</string>
+    <string name="prefs_general_locale_title">Application Language</string>
+    <string name="fsbrowser_cantberead">folder %1$s cannot be read!</string>
+    <string name="fsbrowser_status_line">Folders: %1$s, Files: %2$s, Size: %3$s</string>
+    <string name="fsbrowser_openfile">Do you want to open that file?</string>
+    <string name="fsbrowser_action">Action</string>
+    <string name="sensorservice_started">Sensor Service Started...</string>
+</resources>
