@@ -297,7 +297,7 @@ function initButtons() {
       "command.cgi",
       {
         action: "move",
-        unit: 10
+        unit: 100
       },
       function(data) {
         // alert("Data Loaded: " + data);
@@ -310,7 +310,7 @@ function initButtons() {
       "command.cgi",
       {
         action: "move",
-        unit: 100
+        unit: 1000
       },
       function(data) {
         // alert("Data Loaded: " + data);
@@ -336,7 +336,7 @@ function initButtons() {
       "command.cgi",
       {
         action: "move",
-        unit: -10
+        unit: -100
       },
       function(data) {
         // alert("Data Loaded: " + data);
@@ -349,7 +349,7 @@ function initButtons() {
       "command.cgi",
       {
         action: "move",
-        unit: -100
+        unit: -1000
       },
       function(data) {
         // alert("Data Loaded: " + data);
