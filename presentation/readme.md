@@ -1,3 +1,7 @@
+0. We are Groot
+
+Image AltLabLogo
+
 1. Each year tons of mobile phones end up in the landfill
 
 ![landphone](http://planetmattersandmore.com/wp-content/uploads/2015/10/CellPhones.jpg)
