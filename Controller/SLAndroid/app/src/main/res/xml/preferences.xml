@@ -7,15 +7,15 @@
         android:enabled="true"
         android:icon="@drawable/ic_launcher"
         android:key="nxt_prefs"
-        android:title="@string/prefs_nxtslave" >
+        android:title="@string/prefs_slave" >
         <EditTextPreference
-            android:name="@string/prefs_nxtslave_editBrickName"
-            android:defaultValue="NXT"
+            android:name="@string/prefs_slave_editBTName"
+            android:defaultValue="HC-06"
             android:icon="@drawable/ic_nxt_brick"
-            android:key="editBrickName"
-            android:title="@string/prefs_nxtslave_editBrickName_title" />
+            android:key="editBTName"
+            android:title="@string/prefs_slave_editBTName_title" />
 
-
+<!--
 
         <CheckBoxPreference
             android:defaultValue="true"
@@ -37,7 +37,7 @@
             android:key="nxtMinDistance"
             android:max="200"
             android:text="@string/prefs_nxtslave_nxtMinDistance_text"
-            android:title="@string/prefs_nxtslave_nxtMinDistance_title" />
+            android:title="@string/prefs_nxtslave_nxtMinDistance_title" />-->
     </PreferenceScreen>
     <PreferenceScreen
         android:enabled="true"

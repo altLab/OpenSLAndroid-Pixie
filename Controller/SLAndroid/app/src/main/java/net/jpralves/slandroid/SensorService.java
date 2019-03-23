@@ -277,9 +277,24 @@ public class SensorService extends Service {
 			case Sensor.TYPE_PRESSURE:
 				app.setTableFloat("android.sensor.pressure", event.values[0]);
 				break;
-			default:
-				if (BuildConfig.DEBUG)
-					Log.d(TAG, "Sensor not registered - " + source.getName());
+			case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+				app.setTableFloat("android.sensor.magnetic_uncalibrated", event.values[0]);
+				break;
+			case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+				app.setTableFloat("android.sensor.gyroscope_uncalibrated", event.values[0]);
+				break;
+			case Sensor.TYPE_GAME_ROTATION_VECTOR:
+				app.setTableFloat("android.sensor.game_rotation", event.values[0]);
+				break;
+			case Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR:
+				app.setTableFloat("android.sensor.geomagnetic_rotation", event.values[0]);
+				break;
+			case Sensor.TYPE_MOTION_DETECT:
+				app.setTableFloat("android.sensor.motion_detect", event.values[0]);
+				break;
+//			default:
+//				if (BuildConfig.DEBUG)
+//					Log.d(TAG, "Sensor not registered - " + source.getName());
 			}
 		}
 	};

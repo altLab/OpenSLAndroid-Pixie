@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.nio.charset.StandardCharsets;
@@ -49,7 +47,6 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -110,10 +107,10 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
     private static TextToSpeech myTTS;
 
-//    private NXTControl nxtControl;
+    private Control control;
 
     // TODO: Fix me
-    private String control;
+//    private String control;
 
     private SharedPreferences prefs;
 
@@ -130,7 +127,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
     private ControllerApp app = null;
 
-    private boolean isNXT;
+    private boolean isBT;
 
     private boolean stopRequestsThread;
 
@@ -392,7 +389,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
      */
     public void quit() {
         clearBTstate();
-        stopNXT();
+        stopBT();
         stopWebServer();
         stopSensorService();
         super.finish();
@@ -544,36 +541,22 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
     /**
      * Initializes NXT according to preferences
      */
-    private void startNXT() {
-        isNXT = false;
-        String nxtName = prefs.getString("editBrickName", "NXT");
-        int motorLPos = Integer.parseInt(prefs.getString("motorLeft", "1"));
-        int motorRPos = Integer.parseInt(prefs.getString("motorRight", "2"));
-        int motorFlags = (prefs.getBoolean("nxtBrake", true) ? 0x01 : 0)
-                + (Integer.parseInt(prefs.getString("nxtMotorDirection", "1")) == 1 ? 0x02 : 0);
-        int minDistance = prefs.getInt("nxtMinDistance", 20);
-        int initSpeed = prefs.getInt("nxtSpeed", 300);
-        int touchPos = Integer.parseInt(prefs.getString("touchSensor", "1"));
-        int colorPos = Integer.parseInt(prefs.getString("colorSensor", "2"));
-        int sonicleftPos = Integer.parseInt(prefs.getString("volumetricSensorLeft", "3"));
-        int sonicrightPos = Integer.parseInt(prefs.getString("volumetricSensorRight", "4"));
-        int sonicfrontPos = Integer.parseInt(prefs.getString("volumetricSensorFront", "0"));
-/*
-        control = new Control(nxtName, motorLPos, motorRPos, motorFlags, initSpeed,
-                minDistance, touchPos, colorPos, sonicleftPos, sonicrightPos, sonicfrontPos,
-                (ControllerApp) getApplication());
-        isNXT = control.connectToNXT();*/
+    private void startBT() {
+        isBT = false;
+        String btName = prefs.getString("editBTName", "HC-06");
+        control = new Control(btName, (ControllerApp) getApplication());
+        isBT = control.connectToBT();
     }
 
     /**
      * Stops all activity of the NXT and closes comunications
      */
-    public void stopNXT() {
+    public void stopBT() {
         if (control != null) {
             //control.stopMotors();
             //control.close();
             control = null;
-            isNXT = false;
+            isBT = false;
         }
     }
 
@@ -601,7 +584,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
         protected Void doInBackground(Void... params) {
             msg = getString(R.string.msg_setup_bt);
             publishProgress(0);
-            startNXT();
+            startBT();
             msg = getString(R.string.msg_setup_webserver);
             publishProgress(50);
             startWebServer();
@@ -659,10 +642,10 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
         @Override
         protected Void doInBackground(Void... params) {
-            if (isNXT) {
+            if (isBT) {
                 msg = getString(R.string.msg_disable_bt);
                 publishProgress(0);
-                stopNXT();
+                stopBT();
             }
             if (isServer) {
                 msg = getString(R.string.msg_disable_webserver);
@@ -694,7 +677,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
             tvWeb.setTextColor(oldColors);
             tvWeb.setTypeface(Typeface.DEFAULT);
 
-            resetAndroidButtonsState(isNXT);
+            resetAndroidButtonsState(isBT);
 
             tv.setText(getString(R.string.disconnected));
         }
@@ -951,7 +934,39 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                 });
 
                 res = "OK";
+            } else if(command.compareToIgnoreCase("move") == 0) {
+                if (parms.getProperty("unit")!=null) {
+                    control.sendCommand("MOVE" + parms.getProperty("unit"));
+                    res = "OK";
+                } else {
+                    res="Failed - missing unit";
+                }
+
+            } else if(command.compareToIgnoreCase("setzero") == 0) {
+                  control.sendCommand("SETH");
+                  res = "OK";
+
+            } else if(command.compareToIgnoreCase("home") == 0) {
+                  control.sendCommand("HOME");
+                  res = "OK";
+            } else if(command.compareToIgnoreCase("print") == 0) {
+                int totalslices = app.getTableInt("controller.slices.total");
+                int currentslice = app.getTableInt("controller.slices.current");
+                for(int layer=1;layer<totalslices;layer++) {
+                    String layerstring = String.valueOf(layer);
+                    runOnUiThread(new Runnable(){
+                        public void run() {
+                            showImage(layerstring);
+                        }
+                    });
+                    control.print(layer);
+                }
+                res = "OK";
+            } else {
+                res = "Invalid command";
             }
+
+
 /*           if (command.compareToIgnoreCase("forward") == 0) {
                 nxtControl.moveForward();
             } else if (command.compareToIgnoreCase("left") == 0) {
@@ -990,12 +1005,12 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                                     Properties files) {
                 String mimetype = Response.MIME_JSON;
                 String newList = "";
-                JSONObject jsonNXT = new JSONObject();
+                //JSONObject jsonNXT = new JSONObject();
                 JSONObject jsonAndroid = new JSONObject();
                 JSONObject jsonBrowser = new JSONObject();
                 JSONObject json = new JSONObject();
                 try {
-                    jsonNXT.put("battery", app.getTableValue("nxt.battery"));
+/*                    jsonNXT.put("battery", app.getTableValue("nxt.battery"));
 
                     if (Integer.parseInt(prefs.getString("volumetricSensorFront", "0")) == 0) {
                         jsonNXT.put("leftvolsensor",
@@ -1012,7 +1027,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
                     jsonNXT.put("mindistance", prefs.getInt("nxtMinDistance", 20));
                     jsonNXT.put("control", app.getTableValue("nxt.control"));
                     jsonNXT.put("lefttacho", app.getTableValue("nxt.motor.lefttacho"));
-                    jsonNXT.put("righttacho", app.getTableValue("nxt.motor.righttacho"));
+                    jsonNXT.put("righttacho", app.getTableValue("nxt.motor.righttacho"));*/
 
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HHmmss");
                     String currentDateandTime = sdf.format(new Date());
@@ -1043,7 +1058,7 @@ public class ControllerActivity extends Activity implements TextToSpeech.OnInitL
 
                     jsonBrowser.put("timeout", prefs.getInt("browserRefreshRate", 500));
 
-                    json.put("controller", jsonNXT);
+                   // json.put("controller", jsonNXT);
                     json.put("android", jsonAndroid);
                     json.put("browser", jsonBrowser);
                 } catch (JSONException e) {
