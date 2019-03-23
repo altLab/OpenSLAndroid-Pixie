@@ -28,11 +28,12 @@ int _nrBaseLayers;
 int _nrTotalLayers;
 long _baselLayersMilis;
 long _normalLayersMilis;
-int _layerSliceHeightMicrons;
+long _layerSliceHeightMicrons;
 long _microns_Step;
 
-const int _modePauseHeightMicrons = 60000;
-const int _modeFillHeightMicrons = 80000;
+const long _modePauseHeightMicrons = 60000;
+const long _modeFillHeightMicrons = 60000;
+const long _modePeelHeightMicrons = 7000;
 
 void setup() {
   
@@ -45,7 +46,7 @@ pinMode(PIN_ENDSTOP, INPUT_PULLUP);
 
 // Initialize Z position tracker and define layer and exposure times
 _trackZpos = 0;
-_nrBaseLayers = 8;
+_nrBaseLayers = 4;
 _nrTotalLayers = 40;
 _baselLayersMilis = 40000;
 _normalLayersMilis = 8000;
@@ -64,7 +65,7 @@ void loop() {
 // Lift plate in order to fill the vat with resin (runs once)
 doBootInit();
 enterFillVatMode();
-doPrint(_nrBaseLayers, _nrTotalLayers, 1000, 1200);
+doPrint(_nrBaseLayers, _nrTotalLayers, _baselLayersMilis, _normalLayersMilis);
 enterIdleMode();
   
 }
@@ -94,8 +95,8 @@ void enterPauseMode(){
   Serial.println("Paused...");
   }
 
-void enterWaitMode(){
-  Serial.println("Waiting user input...");
+void enterWaitMode(String msg = "Waiting user input..."){
+  Serial.println(msg);
   doLedToggle();
   while(waitForInput()){
   delay(20);
@@ -103,7 +104,7 @@ void enterWaitMode(){
 }
 
 void enterIdleMode(){
-  Serial.println("IdleMode...");
+  Serial.println("\nIdleMode...");
   while(waitForInput()){
   doLedToggle();
   delay(1000);
@@ -112,39 +113,63 @@ void enterIdleMode(){
 
 void doPrint(int bExposureIterations, int tExposureIterations, long bExposureMilis, long nExposureMilis){
 
+  doPeelMove();
+  
   int nExposureIterations = tExposureIterations-bExposureIterations;
   float estimatePrintingTime = bExposureIterations*(bExposureMilis)+nExposureIterations*(nExposureMilis);
 
   Serial.println("\n Starting print of "+(String)tExposureIterations+" total layers");
-  Serial.println("  estimate printing time "+(String)(estimatePrintingTime/1000)+" seconds");
-  Serial.println("\n Burning "+(String)bExposureIterations+" base layers x "+(String)(bExposureMilis/1000)+" seconds");
+  Serial.println("  estimate printing time "+(String)(estimatePrintingTime)+" miliseconds");
+  Serial.println("\n Burning "+(String)bExposureIterations+" base layers x "+(String)(bExposureMilis)+" miliseconds");
     
   for (int i = 1; i <= bExposureIterations; i++){
-    Serial.println("  Printing layer "+(String)i);
-    digitalWrite(LED_BUILTIN, HIGH); 
+    Serial.println("  Printing layer "+(String)i+" @"+(String)(_trackZpos)+" microns");
+    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(PIN_LED_UV, HIGH);
     delay(bExposureMilis);
     digitalWrite(LED_BUILTIN, LOW);
-    delay(bExposureMilis);
+    digitalWrite(PIN_LED_UV, LOW);
+    Serial.println("  Cooling down...");
+    delay(bExposureMilis/2);
+    doPeelMove();
+    enterWaitMode(" Change layer and press go...");
     }
   
-  Serial.println("\n Burning "+(String)(nExposureIterations)+" normal layers x "+(String)(nExposureMilis/1000)+" seconds");
+  Serial.println("\n Burning "+(String)(nExposureIterations)+" normal layers x "+(String)(nExposureMilis)+" miliseconds");
     
   for (int i = 1; i <= nExposureIterations; i++){
-    Serial.println("  Printing layer "+(String)i);
-    digitalWrite(LED_BUILTIN, HIGH); 
+    Serial.println("  Printing layer "+(String)i+" @"+(String)(_trackZpos)+" microns");
+    digitalWrite(LED_BUILTIN, HIGH);
+    digitalWrite(PIN_LED_UV, HIGH); 
     delay(nExposureMilis);
     digitalWrite(LED_BUILTIN, LOW);
-    delay(nExposureMilis);
+    digitalWrite(PIN_LED_UV, LOW);
+    Serial.println("  Cooling down...");
+    delay(bExposureMilis/2);
+    doPeelMove();
+    enterWaitMode(" Change layer and press go...");
     }
   }
   
 void doPeelMove(){
-  // PeelUp
+  
+  Serial.println("   Peeling...");  
+  
+  _trackZpos = _trackZpos + _layerSliceHeightMicrons;
+  
+  _steps = _modePeelHeightMicrons/_microns_Step*-1;
+  Serial.println(_steps);
   stepper.move(_steps);
-  delay(100);
-  // Return
+
+
+  
+  _steps = (_modePeelHeightMicrons - _layerSliceHeightMicrons)/_microns_Step;
+  Serial.println(_steps);
   stepper.move(_steps);
-  delay(100);
+  
+
+
+  
   }
 
 void doUvToggle(int layerMilis){
