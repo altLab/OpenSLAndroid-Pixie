@@ -19,9 +19,9 @@ Use android phones and tablets to control/create a SLA printer.
 - A SLA structure ***
 
 
-* *These should be bought*
-** *These can be sourced from junk*
-*** *These can be printed*
+\* *These should be bought*
+\** *These can be sourced from junk*
+\*** *These can be printed*
 
 Photo Album: https://photos.app.goo.gl/yLVV1ukoPkDVPtfRA
 
