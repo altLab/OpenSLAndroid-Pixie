@@ -1,6 +1,8 @@
 # OpenSLAndroid-Pixie
 Use android phones and tablets to control/create a SLA printer.
 
+We adapted a Android App that can be easily installed on any android device that puts up a webserver
+
 ### The project BOM
 
 #### Electronics
