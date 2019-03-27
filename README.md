@@ -11,7 +11,7 @@ Use android phones and tablets to control/create a SLA printer.
 - Relay for the LED **
 - 405nm LED *
 
-### Mechanics
+#### Mechanics
 
 - 2 Linear Guides *
 - 1 Stepper Motor **
